@@ -22,7 +22,7 @@ jobs:
     needs: build-and-test
     steps:
       - name: Checking Dockerfile Location
-        run: ls ./
+        run: pwd
       - name: Build Docker Image
         run: docker build -t myapp:latest .
       - name: Login to DockerHub
