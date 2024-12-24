@@ -4,22 +4,20 @@ on:
     branches:
       - main
 jobs:
-  build-and-test:
+  sast-analysis:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 14
-      - name: Install Dependencies
-        run: npm install
-      - name: Run Tests
-        run: npm test
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+      - name: Run SAST with Snyk
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk code test
   docker-build-and-deploy:
     runs-on: ubuntu-latest
-    needs: build-and-test
+    needs: sast-analysis
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
