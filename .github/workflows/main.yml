@@ -36,13 +36,9 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Start Application
+      - name: Install OWASP ZAP
         run: |
-          docker-compose up -d
-          sleep 10
-      - name: Run OWASP ZAP Scan
-        uses: zapbot/zap-action@v0.1.0
-        with:
-          target: "http://localhost:3000"
-      - name: Stop Application
-        run: docker-compose down
+          sudo apt-get update
+          sudo apt-get install -y zaproxy
+      - name: Run ZAP Scan
+        run: zap-baseline.py -t http://localhost:3000 -r zap-report.html
