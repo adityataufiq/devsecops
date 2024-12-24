@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Checking
-        run: ls
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
