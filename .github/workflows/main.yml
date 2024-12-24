@@ -30,3 +30,19 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push Docker Image
         run: docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+  dast-scan:
+    runs-on: ubuntu-latest
+    needs: docker-build-and-deploy
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Start Application
+        run: |
+          docker-compose up -d
+          sleep 10
+      - name: Run OWASP ZAP Scan
+        uses: zapbot/zap-action@v0.1.0
+        with:
+          target: "http://localhost:3000"
+      - name: Stop Application
+        run: docker-compose down
